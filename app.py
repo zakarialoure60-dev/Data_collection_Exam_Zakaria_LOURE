@@ -102,6 +102,40 @@ if page == "Books":
         )
 
     # -------------------------
+    # GRAPHIQUES
+    # -------------------------
+
+    st.subheader("Data Visualization")
+
+    chart_col1, chart_col2 = st.columns(2)
+
+    # Répartition des livres par note
+    with chart_col1:
+
+        rating_counts = (
+            books_filtered["note"]
+            .value_counts()
+            .sort_index()
+        )
+
+        st.write("Books by rating")
+
+        st.bar_chart(rating_counts)
+
+    # Prix moyen par note
+    with chart_col2:
+
+        average_price_by_rating = (
+            books_filtered
+            .groupby("note")["prix"]
+            .mean()
+        )
+
+        st.write("Average price by rating")
+
+        st.bar_chart(average_price_by_rating)
+
+    # -------------------------
     # TABLEAU
     # -------------------------
 
