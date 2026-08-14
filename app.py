@@ -66,7 +66,8 @@ page = st.sidebar.radio(
         "📚 Books Dashboard",
         "🚗 Gaaraas Dashboard",
         "🕷️ Live Scraping",
-        "📥 Raw Data Downloads"
+        "📥 Raw Data Downloads",
+        "📝 Application Evaluation"
     ]
 )
 
@@ -890,7 +891,7 @@ elif page == "🕷️ Live Scraping":
 # PAGE 4 : RAW DATA DOWNLOADS
 # ==========================================================
 
-else:
+elif page == "📥 Raw Data Downloads":
 
     st.header(
         "📥 Raw Data Downloads"
@@ -987,3 +988,72 @@ else:
             "Gaaraas raw CSV was not found "
             "in the GitHub repository."
         )
+
+# ==========================================================
+# PAGE 5 : APPLICATION EVALUATION
+# ==========================================================
+
+else:
+
+    st.header(
+        "📝 Application Evaluation"
+    )
+
+    st.write(
+        "Thank you for testing the application. "
+        "Please share your feedback using one of the two evaluation forms below."
+    )
+
+    st.info(
+        "The two forms contain the same evaluation questionnaire. "
+        "You can choose KoboToolbox or Google Forms."
+    )
+
+    kobo_url = "https://ee.kobotoolbox.org/x/xFhWFmtd"
+
+    google_form_url = (
+        "https://docs.google.com/forms/d/e/"
+        "1FAIpQLSetL_PXdn9dvqhFRj4LMB2rRURrIABWYVaZwsHIDJ9HrEIfxg/"
+        "viewform?usp=publish-editor"
+    )
+
+    col1, col2 = st.columns(2)
+
+    with col1:
+
+        st.subheader(
+            "🟦 KoboToolbox"
+        )
+
+        st.write(
+            "Complete the application evaluation form using KoboToolbox."
+        )
+
+        st.link_button(
+            "Open KoboToolbox Form",
+            kobo_url,
+            use_container_width=True
+        )
+
+    with col2:
+
+        st.subheader(
+            "🟩 Google Forms"
+        )
+
+        st.write(
+            "Complete the application evaluation form using Google Forms."
+        )
+
+        st.link_button(
+            "Open Google Form",
+            google_form_url,
+            use_container_width=True
+        )
+
+    st.markdown("---")
+
+    st.success(
+        "Thank you for your valuable feedback! "
+        "Your comments will help improve the application."
+    )
