@@ -8,6 +8,7 @@ from selenium.webdriver.chrome.service import Service
 
 import shutil
 import time
+from pathlib import Path
 
 
 # ============================================
@@ -64,7 +65,8 @@ page = st.sidebar.radio(
     [
         "📚 Books Dashboard",
         "🚗 Gaaraas Dashboard",
-        "🕷️ Live Scraping"
+        "🕷️ Live Scraping",
+        "📥 Raw Data Downloads"
     ]
 )
 
@@ -497,7 +499,7 @@ elif page == "🚗 Gaaraas Dashboard":
 # PAGE 3 : LIVE SCRAPING
 # ==========================================================
 
-else:
+elif page == "🕷️ Live Scraping":
 
     st.header(
         "🕷️ Live Web Scraping"
@@ -551,10 +553,6 @@ else:
 
         try:
 
-            # --------------------------------
-            # LOCALISATION CHROMIUM
-            # --------------------------------
-
             chromium_path = (
                 shutil.which("chromium")
                 or
@@ -590,9 +588,7 @@ else:
 
             options = webdriver.ChromeOptions()
 
-            options.binary_location = (
-                chromium_path
-            )
+            options.binary_location = chromium_path
 
             options.add_argument(
                 "--headless"
@@ -632,11 +628,7 @@ else:
 
             collected_data = []
 
-
-            progress_bar = (
-                st.progress(0)
-            )
-
+            progress_bar = st.progress(0)
 
             status_text = st.empty()
 
@@ -668,10 +660,6 @@ else:
                 time.sleep(1)
 
 
-                # --------------------------------
-                # CONTENEURS PRODUITS
-                # --------------------------------
-
                 containers = (
                     driver.find_elements(
                         By.CSS_SELECTOR,
@@ -684,10 +672,6 @@ else:
                     containers
                 )
 
-
-                # --------------------------------
-                # EXTRACTION
-                # --------------------------------
 
                 for container in containers:
 
@@ -800,7 +784,7 @@ else:
 
 
             # --------------------------------
-            # CREATION DATAFRAME
+            # DATAFRAME
             # --------------------------------
 
             live_df = pd.DataFrame(
@@ -855,7 +839,7 @@ else:
 
 
             # --------------------------------
-            # TELECHARGEMENT RESULTAT LIVE
+            # DOWNLOAD LIVE RESULT
             # --------------------------------
 
             live_csv = (
@@ -901,4 +885,105 @@ else:
 
                 driver.quit()
 
-                driver.quit()
+
+# ==========================================================
+# PAGE 4 : RAW DATA DOWNLOADS
+# ==========================================================
+
+else:
+
+    st.header(
+        "📥 Raw Data Downloads"
+    )
+
+    st.write(
+        "Download the original raw datasets collected "
+        "with the Web Scraper Chrome extension."
+    )
+
+    st.info(
+        "These files contain the no-code scraping results "
+        "before data cleaning."
+    )
+
+
+    # ----------------------------------------
+    # CHEMINS DES FICHIERS
+    # ----------------------------------------
+
+    books_raw_path = Path(
+        "my_data_collection_examan_sitemap_books.csv"
+    )
+
+    gaaraas_raw_path = Path(
+        "sitemap_gaaraas_data_collection_examen.csv"
+    )
+
+
+    # ----------------------------------------
+    # BOOKS RAW
+    # ----------------------------------------
+
+    st.subheader(
+        "📚 Books — Raw Web Scraper Data"
+    )
+
+    if books_raw_path.exists():
+
+        books_raw_bytes = (
+            books_raw_path.read_bytes()
+        )
+
+        st.success(
+            "Books raw dataset is available."
+        )
+
+        st.download_button(
+            label="⬇️ Download Books raw CSV",
+            data=books_raw_bytes,
+            file_name=books_raw_path.name,
+            mime="text/csv"
+        )
+
+    else:
+
+        st.error(
+            "Books raw CSV was not found "
+            "in the GitHub repository."
+        )
+
+
+    st.markdown("---")
+
+
+    # ----------------------------------------
+    # GAARAAS RAW
+    # ----------------------------------------
+
+    st.subheader(
+        "🚗 Gaaraas — Raw Web Scraper Data"
+    )
+
+    if gaaraas_raw_path.exists():
+
+        gaaraas_raw_bytes = (
+            gaaraas_raw_path.read_bytes()
+        )
+
+        st.success(
+            "Gaaraas raw dataset is available."
+        )
+
+        st.download_button(
+            label="⬇️ Download Gaaraas raw CSV",
+            data=gaaraas_raw_bytes,
+            file_name=gaaraas_raw_path.name,
+            mime="text/csv"
+        )
+
+    else:
+
+        st.error(
+            "Gaaraas raw CSV was not found "
+            "in the GitHub repository."
+        )
